@@ -17,18 +17,24 @@ App.Counter = () => {
     Counter 객체를 만들어 파라미터로 전달받기
     data를 출력할 DOM element도 파라미터로 전달받기
 */
-App.CounterView = (counter, updateEl) => {
+App.CounterView = (counter, options) => {
     if(!counter) throw new Error(App.CounterView.messages.noCounter);
-    if(!updateEl) throw new Error(App.CounterView.messages.noUpdateEl);
-    return {
+    if(!options.updateEl) throw new Error(App.CounterView.messages.noUpdateEl);
+
+    const view = {
         updateView() {
-            updateEl.innerHTML = counter.getValue();
+            options.updateEl.innerHTML = counter.getValue();
         },
+
         increaseAndUpdateView() {
             counter.increaseValue();
             this.updateView();
         }  
-    }    
+    }
+    options.triggerEl.addEventListener("click", () => {
+        view.increaseAndUpdateView()
+    })
+    return view;
 }
 
 App.CounterView.messages = {

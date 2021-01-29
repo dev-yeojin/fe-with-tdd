@@ -1,5 +1,6 @@
 describe('App.Counter', () => {
     let counter;
+
     beforeEach(()=> {
         counter = App.Counter();
     })
@@ -24,31 +25,28 @@ describe('App.Counter', () => {
     data를 출력할 DOM element도 파라미터로 전달받기
 */
 describe('App.CounterView', () => {
-    let counter, updateEl, view;
+    let counter, updateEl, triggerEl, data, view;
+    
     beforeEach(()=> {
         /* DRY(Do not Repeat Yourself) 원칙  */
-        counter = App.Counter();
         updateEl = document.createElement('span');
-        view = App.CounterView(counter, updateEl);
+        triggerEl = document.createElement('button');
+        counter = App.Counter()
+        view = App.CounterView(counter, { updateEl, triggerEl })
     });
 
-    it('counter 주입되지않으면 error return', () => {
-        clickCounter = null;
-        const actual = () => {
-            App.CounterView(null, updateEl);
-        };
-        expect(actual).toThrowError(App.CounterView.messages.noCounter);
-    });
+    describe('네거티브 테스트', () => {
+        it('counter 주입되지않으면 error return', () => {
+            const actual = () => App.CounterView(null, { updateEl });
+            expect(actual).toThrowError(App.CounterView.messages.noCounter);
+        })
 
-    it('updateEl 주입되지않으면 error return', () => {
-        counter = App.Counter();
-        const actual = () => {
-            App.CounterView(clickCounter, null);
-        };
-        expect(actual).toThrowError();
-        //expect(actual).toThrowError(App.CounterView.messages.noUpdateEl);
-    });
-
+        it('updateEl 주입되지않으면 error return', () => {
+            const actual = () => App.CounterView(counter, { triggerEl });
+            expect(actual).toThrowError(App.CounterView.messages.noUpdateEl);
+        })
+    })
+    
     describe('updateView()', () => {
         it('Counter getValue()', () => {
             let counterValue = counter.getValue();
@@ -58,8 +56,6 @@ describe('App.CounterView', () => {
     })
 
     describe('increaseAndUpdateView()는', () => {
-        beforeEach(() => {
-        })
         it('Counter의 increaseValue 함수 실행', () => {
             spyOn(counter, 'increaseValue');
             view.increaseAndUpdateView();
@@ -70,9 +66,12 @@ describe('App.CounterView', () => {
             view.increaseAndUpdateView();
             expect(view.updateView).toHaveBeenCalled()
         })
-        // it('click 이벤트가 발생하면 increaseAndUpdateView를 실행한다.', () => {
-        //     spyOn(view, 'increaseAndUpdateView')
-        //     expect(view.increaseAndUpdateView).toHaveBeenCalled()
-        // })
+    });
+
+    
+    it('click 이벤트가 발생하면 increaseAndUpdateView를 실행한다.', () => {
+        spyOn(view, 'increaseAndUpdateView')
+        triggerEl.click()
+        expect(view.increaseAndUpdateView).toHaveBeenCalled()
     })
 });
