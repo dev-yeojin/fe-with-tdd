@@ -1,15 +1,41 @@
 var App = App || {};
 
-App.Counter = () => {
-  let value = 0;
+App.Counter = (_data) => {
+  if (!_data) throw new Error(App.Counter.messages.noData);
+
+  /*
+    유연하게 사용하기 위함
+    data를 공유하기 위해서 원시형(Number)을 사용할 수 없다.
+    생성인자로 넘겨주면 그 값은 복사되기 때문에 레퍼런스로 받는 객체타입을 사용해야한다!!
+    */
+  const data = _data;
+  data.value = data.value || 0;
+
   return {
     getValue() {
-      return value;
+      return data.value;
     },
+    /*
     increaseValue() {
-      return value++;
+        data.value ++;
+    },
+    decreaseValue() {
+        data.value --;
+    }
+    */
+    count() {
+      data.value++;
+    },
+    setCountFn(fn) {
+        console.log(fn);
+      this.count = () => (data.value = fn(data.value)) 
+      return this;
     },
   };
+};
+
+App.Counter.messages = {
+  noData: "초기값을 주입해야합니다.",
 };
 
 /*
@@ -27,13 +53,13 @@ App.CounterView = (counter, options) => {
       options.updateEl.innerHTML = counter.getValue();
     },
 
-    increaseAndUpdateView() {
-      counter.increaseValue();
+    countAndUpdateView() {
+      counter.count();
       this.updateView();
     },
   };
   options.triggerEl.addEventListener("click", () => {
-    view.increaseAndUpdateView();
+    view.countAndUpdateView();
   });
   return view;
 };

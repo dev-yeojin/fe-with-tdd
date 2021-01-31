@@ -2,20 +2,33 @@
 <html>
   <head></head>
   <body>
+    <button id="btn-increase">+</button>
     <span id="counter-display"></span>
-    <button id="btn-increase">Increase</button>
-    
+    <button id="btn-decrease">-</button>
+
     <script src="./Counter.js"></script>
 
     <script>
-        (() => {
-            const counter = App.Counter();
-            const updateEl = document.querySelector("#counter-display");
-            const triggerEl = document.querySelector("#btn-increase");
-            const view = App.CounterView(counter, { updateEl, triggerEl });
-            view.updateView();
-        })();
+      (() => {
+        const data = { value: 0 };
+        const counterInc = App.Counter(data);
+        const counterDec = App.Counter(data).setCountFn(value => value - 1);
 
+        const updateEl = document.querySelector("#counter-display");
+        const btnInc = document.querySelector("#btn-increase");
+        const btnDec = document.querySelector("#btn-decrease");
+
+        const increaseView = App.CounterView(counterInc, {
+          updateEl,
+          triggerEl: btnInc,
+        });
+        const decreaseView = App.CounterView(counterDec, {
+          updateEl,
+          triggerEl: btnDec,
+        });
+
+        decreaseView.updateView();
+      })();
     </script>
-</body>
+  </body>
 </html>
