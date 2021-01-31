@@ -69,7 +69,7 @@ describe('App.CounterView', () => {
     });
 
     
-    it('click 이벤트가 발생하면 increaseAndUpdateView를 실행한다.', () => {
+    it('Click 이벤트가 발생하면 increaseAndUpdateView를 실행한다.', () => {
         spyOn(view, 'increaseAndUpdateView')
         triggerEl.click()
         expect(view.increaseAndUpdateView).toHaveBeenCalled()
