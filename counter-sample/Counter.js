@@ -27,7 +27,6 @@ App.Counter = (_data) => {
       data.value++;
     },
     setCountFn(fn) {
-        console.log(fn);
       this.count = () => (data.value = fn(data.value)) 
       return this;
     },

@@ -2,9 +2,12 @@
 <html>
   <head></head>
   <body>
+    <div>
+      <span id="counter-display"></span>
+    </div>
     <button id="btn-increase">+</button>
-    <span id="counter-display"></span>
     <button id="btn-decrease">-</button>
+    <button id="btn-double">2배</button>
 
     <script src="./Counter.js"></script>
 
@@ -12,11 +15,13 @@
       (() => {
         const data = { value: 0 };
         const counterInc = App.Counter(data);
-        const counterDec = App.Counter(data).setCountFn(value => value - 1);
+        const counterDec = App.Counter(data).setCountFn((value) => value - 1);
+        const countDouble = App.Counter(data).setCountFn((v) => 2 * v);
 
         const updateEl = document.querySelector("#counter-display");
         const btnInc = document.querySelector("#btn-increase");
         const btnDec = document.querySelector("#btn-decrease");
+        const btnDouble = document.querySelector("#btn-double");
 
         const increaseView = App.CounterView(counterInc, {
           updateEl,
@@ -26,8 +31,12 @@
           updateEl,
           triggerEl: btnDec,
         });
+        const doubleView = App.CounterView(countDouble, {
+          updateEl,
+          triggerEl: btnDouble,
+        });
 
-        decreaseView.updateView();
+        increaseView.updateView();
       })();
     </script>
   </body>
